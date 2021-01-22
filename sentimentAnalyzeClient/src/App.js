@@ -45,17 +45,19 @@ class App extends React.Component {
     }
     ret = axios.get(url);
     ret.then((response)=>{
+    console.log(response);
+      const positiveness = response.data.result.sentiment.document.label;
+      const renderResult = Object.values(response.data.result.sentiment.document).join(' ');
 
-      //Include code here to check the sentiment and fomrat the data accordingly
 
-      this.setState({sentimentOutput:response.data});
-      let output = response.data;
-      if(response.data === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>{response.data}</div>
-      } else if (response.data === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>{response.data}</div>
+      this.setState({sentimentOutput:renderResult});
+      let output = renderResult;
+      if(positiveness === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{renderResult}</div>
+      } else if (positiveness === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{renderResult}</div>
       } else {
-        output = <div style={{color:"orange",fontSize:20}}>{response.data}</div>
+        output = <div style={{color:"orange",fontSize:20}}>{renderResult}</div>
       }
       this.setState({sentimentOutput:output});
     });
@@ -73,7 +75,7 @@ class App extends React.Component {
     ret = axios.get(url);
 
     ret.then((response)=>{
-      this.setState({sentimentOutput:<EmotionTable emotions={response.data}/>});
+      this.setState({sentimentOutput:<EmotionTable emotions={response.data.result.emotion.document}/>});
   });
   }
   
